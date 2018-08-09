@@ -117,30 +117,30 @@ describe('Identity', () => {
 
     it('traverses queries and includes the microstates within them', function() {
       expect(id.completed).toBeDefined();
-      expect(id.completed[0]).toBeInstanceOf(Todo);
+      expect(id.completed.first).toBeInstanceOf(Todo);
     });
 
     describe('the effect of transitions on query identities', () => {
       let next;
       beforeEach(function() {
-        next = id.completed[0].title.set('Take out the milk');
+        next = id.completed.first.title.set('Take out the milk');
       });
 
       it('updates those queries which contain changed objects, but not ids *within* the query that remained the same', () => {
         expect(next.completed).not.toBe(id.completed);
-        expect(next.completed[0]).not.toBe(id.completed[0]);
-        expect(next.completed[1]).toBe(id.completed[1]);
+        expect(next.completed.first).not.toBe(id.completed.first);
+        expect(next.completed.second).toBe(id.completed.second);
       });
 
       it.skip('maintains the === identity of those queries which did not change', function() {
-        expect(next.active[0]).toBe(id.active[0]);
-        expect(next.active[1]).toBe(id.active[1]);
+        expect(next.active.first).toBe(id.active.first);
+        expect(next.active.second).toBe(id.active.second);
         expect(next.active).toBe(id.active)
       });
 
       it('maintains the === identity of the same node that appears at different spots in the tree', () => {
-        expect(id.todos[0]).toBe(id.completed[0]);
-        expect(next.todos[0]).toBe(next.completed[0]);
+        expect(id.todos[0]).toBe(id.completed.first);
+        expect(next.todos[0]).toBe(next.completed.first);
       })
     })
   });

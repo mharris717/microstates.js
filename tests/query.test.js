@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { create } from '../src/microstates';
-import { map, filter, reduce } from '..';
+import { map, filter } from '../index';
 
 import { TodoMVC } from './todomvc';
 
@@ -17,35 +17,22 @@ describe('A Microstate with queries', function() {
   });
   it('can partition an array microstate using filter', function() {
     expect(todomvc.completed.length).toEqual(2)
-    expect(todomvc.completed[0]).toEqual(todomvc.todos[0])
-    expect(todomvc.completed[1]).toEqual(todomvc.todos[2])
+    expect(todomvc.completed.first).toEqual(todomvc.todos[0])
+    expect(todomvc.completed.second).toEqual(todomvc.todos[2])
     expect(todomvc.active.length).toEqual(2)
-    expect(todomvc.active[0]).toEqual(todomvc.todos[1])
-    expect(todomvc.active[1]).toEqual(todomvc.todos[3])
+    expect(todomvc.active.first).toEqual(todomvc.todos[1])
+    expect(todomvc.active.second).toEqual(todomvc.todos[3])
   });
 
   describe('invoking a transition from one of the object returned by a query.', function() {
     let next;
     beforeEach(function() {
-      next = todomvc.active[0].toggle()
+      next = todomvc.active.first.toggle()
     });
     it('has the desired effect on the original item', function() {
       expect(next.todos[1].completed.state).toEqual(true);
       expect(next.active.length).toEqual(1)
       expect(next.completed.length).toEqual(3)
     });
-  });
-});
-
-describe('Query Array', () => {
-  let array = [true, false, true];
-  it('can reduce a regular array', () => {
-    expect(reduce(array, (acc, bool) => bool ? ++acc : acc, 0)).toBe(2);
-  });
-  it('can map a regular array', () => {
-    expect(map(array, bool => !bool)).toEqual([false, true, false]);
-  });
-  it('can filter a regular array', () => {
-    expect(filter(array, Boolean)).toEqual([true, true]);
   });
 });
