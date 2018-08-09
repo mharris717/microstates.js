@@ -46,6 +46,8 @@
   },
   "dependencies": {
     "funcadelic": "^0.5.0",
+    "generation": "cowboyd/generation.js#master",
+    "regenerator-runtime": "^0.12.1",
     "symbol-observable": "^1.2.0"
   }
 }

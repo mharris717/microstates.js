@@ -1,3 +1,5 @@
+import "regenerator-runtime/runtime";
+
 import { Assemble } from '../assemble';
 import { create, SubstateAt, Meta } from "../microstates";
 import { set } from "../lens";
@@ -44,6 +46,12 @@ export default parameterized(T => class ArrayType {
   }
 
   static initialize() {
+    this.prototype[Symbol.iterator] = function* () {
+      for (let i = 0; i < this.state.length; i++) {
+        yield this[i];
+      }
+    }
+
     Assemble.instance(this, {
       assemble(Type, microstate, value) {
         if (value == null) {
